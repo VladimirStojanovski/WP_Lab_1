@@ -18,12 +18,12 @@ import java.util.List;
 @WebServlet(name = "EventListServlet", urlPatterns = "")
 public class EventListServlet extends HttpServlet {
 
-    private final SpringTemplateEngine springTemplateEngine;
     private final EventService eventService;
+    private final SpringTemplateEngine springTemplateEngine;
 
     public EventListServlet(SpringTemplateEngine springTemplateEngine, EventService eventService) {
-        this.springTemplateEngine = springTemplateEngine;
         this.eventService = eventService;
+        this.springTemplateEngine = springTemplateEngine;
     }
 
     @Override

@@ -18,7 +18,6 @@
     <h2>Choose an event:</h2>
     <form action="/eventBooking" method="POST">
         <ul>
-            <!-- Use Thymeleaf to iterate over each event -->
             <li th:each="event : ${events}">
                 <input type="radio" name="eventName" th:value="${event.name}">
                 Name: <span th:text="${event.name}"></span>,
