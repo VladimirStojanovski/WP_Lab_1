@@ -11,5 +11,5 @@ public class EventBookingServiceImpl implements EventBookingService {
     public EventBooking placeBooking(String eventName, String attendeeName, String attendeeAddress, int numberOfTickets) {
         return new EventBooking(eventName, attendeeName, attendeeAddress, (long) numberOfTickets);
     }
-    
+
 }
