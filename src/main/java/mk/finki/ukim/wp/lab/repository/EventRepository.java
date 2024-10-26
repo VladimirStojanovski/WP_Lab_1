@@ -1,10 +1,12 @@
 package mk.finki.ukim.wp.lab.repository;
 
 import mk.finki.ukim.wp.lab.model.Event;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class EventRepository {
     private List<Event> events = new ArrayList<>();
 
