@@ -21,7 +21,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> searchEvents(String text) {
-        return eventRepository.searchEvents(text);
+    public List<Event> searchEvents(String text, Double minRating) {
+        return eventRepository.searchEvents(text, minRating);
     }
 }

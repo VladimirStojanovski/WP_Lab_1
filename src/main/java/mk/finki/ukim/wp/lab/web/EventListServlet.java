@@ -28,13 +28,27 @@ public class EventListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Event> events = eventService.listAll();
 
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(req, resp);
 
         WebContext context = new WebContext(webExchange);
+
+        String searchText = req.getParameter("searchText");
+        String minRatingStr = req.getParameter("minRating");
+
+        System.out.println(searchText);
+        System.out.println(minRatingStr);
+
+        List<Event> events;
+
+        if (searchText != null && minRatingStr != null) {
+            double minRating = Double.parseDouble(minRatingStr);
+            events = eventService.searchEvents(searchText, minRating);
+        } else {
+            events = eventService.listAll();
+        }
 
         context.setVariable("events", events);
 

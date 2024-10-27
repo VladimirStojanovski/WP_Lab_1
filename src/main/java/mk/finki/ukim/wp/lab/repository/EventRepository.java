@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class EventRepository {
@@ -22,9 +23,10 @@ public class EventRepository {
         return events;
     }
 
-    public List<Event> searchEvents(String text) {
+    public List<Event> searchEvents(String text, Double minRating) {
         return events.stream()
-                .filter(event -> event.getName().contains(text) || event.getDescription().contains(text))
-                .toList();
+                .filter(event -> (event.getName().contains(text) || event.getDescription().contains(text)) &&
+                        event.getPopularityScore() >= minRating)
+                .collect(Collectors.toList());
     }
 }
