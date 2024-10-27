@@ -20,29 +20,43 @@ public class EventBookingServlet extends HttpServlet {
     private final EventBookingService eventBookingService;
     private final SpringTemplateEngine springTemplateEngine;
 
-    public EventBookingServlet(EventBookingService eventBookingService) {
+    public EventBookingServlet(EventBookingService eventBookingService, SpringTemplateEngine springTemplateEngine) {
         this.eventBookingService = eventBookingService;
-        this.springTemplateEngine = new SpringTemplateEngine();
+        this.springTemplateEngine = springTemplateEngine;
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//
-//        String attendeeName = req.getLocalName();
-//        String attendeeAddress = req.getRemoteAddr();
-//        String eventName = req.getParameter("eventName");
-//        int numberOfTickets = Integer.parseInt(req.getParameter("numTickets"));
-//
-//        EventBooking booking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numberOfTickets);
-//
-//        IWebExchange webExchange = JakartaServletWebApplication
-//                .buildApplication(getServletContext())
-//                .buildExchange(req, resp);
-//
-//        WebContext context = new WebContext(webExchange);
-//
-//        context.setVariable("booking", booking);
-//
-//        springTemplateEngine.process("bookingConfirmation", context, resp.getWriter());
-//    }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        IWebExchange webExchange = JakartaServletWebApplication
+                .buildApplication(getServletContext())
+                .buildExchange(req, resp);
+
+        WebContext context = new WebContext(webExchange);
+
+        String attendeeName = req.getLocalName();
+        String attendeeAddress = req.getRemoteAddr();
+        String eventName = req.getParameter("eventName");
+        String numTicketsParam = req.getParameter("numTickets");
+
+        int numberOfTickets;
+        try {
+            numberOfTickets = Integer.parseInt(numTicketsParam);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid number of tickets");
+            return;
+        }
+
+        EventBooking booking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numberOfTickets);
+
+        context.setVariable("booking", booking);
+
+        springTemplateEngine.process("bookingConfirmation", context, resp.getWriter());
+
+    }
 }
