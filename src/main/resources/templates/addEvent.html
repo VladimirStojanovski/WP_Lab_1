@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Add New Event</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+        }
+        table, td, th {
+            border: 1px solid black;
+            padding: 3px 2px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Add New Event</h1>
+</header>
+
+<form action="/events/add" method="POST">
+    <label for="name">Event Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="description">Event Description:</label>
+    <input type="text" id="description" name="description" required><br><br>
+
+    <label for="popularityScore">Popularity Score:</label>
+    <input type="number" id="popularityScore" name="popularityScore" step="0.1" min="0" required><br><br>
+
+    <label for="locationId">Location:</label>
+    <select name="locationId" id="locationId" required>
+        <option value="" disabled selected>Select a location</option>
+        <th:block th:each="location : ${locations}">
+            <option th:value="${location.id}" th:text="${location.name}"></option>
+        </th:block>
+    </select><br><br>
+
+    <input type="submit" value="Add Event">
+</form>
+
+</body>
+</html>

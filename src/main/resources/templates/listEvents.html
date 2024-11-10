@@ -32,6 +32,12 @@
                 Name: <span th:text="${event.name}"></span>,
                 Description: <span th:text="${event.description}"></span>,
                 Rating: <span th:text="${event.popularityScore}"></span>
+                Location: <span th:text="${event.location.name}"></span>
+
+                <a th:href="@{/events/edit/{eventId}(eventId=${event.id})}">Edit</a>
+
+                <a th:href="@{/events/delete/{id}(id=${event.id})}" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+
             </li>
         </ul>
         <h2>Choose number of tickets:</h2>

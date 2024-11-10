@@ -16,6 +16,16 @@ public class EventServiceImpl implements EventService {
         this.eventRepository = eventRepository;
     }
 
+    public Event findById(long id) {
+        for (Event event : events) {
+            if (event.getId() == id) {
+                return event;
+            }
+            else return null;
+        }
+        return null;
+    }
+
     @Override
     public List<Event> listAll() {
         return eventRepository.findAll();
