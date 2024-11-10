@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class Event {
+    private Location location;
     private Long id;
     private String name;
     private String description;
