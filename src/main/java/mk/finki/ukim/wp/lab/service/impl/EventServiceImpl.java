@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class EventServiceImpl implements EventService {
+
     private final EventRepository eventRepository;
 
     public EventServiceImpl(EventRepository eventRepository) {
