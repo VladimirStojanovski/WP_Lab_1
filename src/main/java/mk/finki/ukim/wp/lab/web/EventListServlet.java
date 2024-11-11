@@ -38,9 +38,6 @@ public class EventListServlet extends HttpServlet {
         String searchText = req.getParameter("searchText");
         String minRatingStr = req.getParameter("minRating");
 
-        System.out.println(searchText);
-        System.out.println(minRatingStr);
-
         List<Event> events;
 
         if (searchText != null && minRatingStr != null) {
