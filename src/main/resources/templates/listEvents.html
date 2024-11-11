@@ -39,6 +39,8 @@
 
                 <a th:href="@{/events/delete/{id}(id=${event.id})}" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
 
+                <a th:href="@{/events/like/{eventId}(eventId=${event.id})}">Like</a>
+
             </li>
         </ul>
         <h2>Choose number of tickets:</h2>
