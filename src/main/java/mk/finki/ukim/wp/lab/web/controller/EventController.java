@@ -41,10 +41,26 @@ public class EventController {
 
     @GetMapping("/add")
     public String getAddEventPage(Model model) {
-        List<Location> locations = locationService.findAll();
-        model.addAttribute("locations", locations);
+        model.addAttribute("locations", locationService.findAll());
+        model.addAttribute("event", null);
         return "addEvent";
     }
+
+    @GetMapping("/edit/{eventId}")
+    public String getEditEventForm(@PathVariable Long eventId, Model model) {
+        Event event = eventService.getEventById(eventId);
+
+        if (event == null) {
+            model.addAttribute("hasError", true);
+            model.addAttribute("error", "Event not found");
+            return "redirect:/events";
+        }
+
+        model.addAttribute("event", event);
+        model.addAttribute("locations", locationService.findAll());
+        return "addEvent";
+    }
+
 
     @PostMapping("/add")
     public String saveEvent(@RequestParam String name,
@@ -61,16 +77,6 @@ public class EventController {
         eventRepository.findAll().add(event);
 
         return "redirect:/events";
-    }
-
-    @GetMapping("/edit/{eventId}")
-    public String getEditEventPage(@PathVariable Long eventId, Model model) {
-        Event event = eventRepository.findById(eventId);
-        List<Location> locations = locationService.findAll();
-
-        model.addAttribute("event", event);
-        model.addAttribute("locations", locations);
-        return "editEvent";
     }
 
     @PostMapping("/edit/{eventId}")
