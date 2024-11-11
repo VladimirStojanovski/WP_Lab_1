@@ -29,6 +29,7 @@
         <ul>
             <li th:each="event : ${events}">
                 <input type="radio" name="eventName" th:value="${event.name}">
+                ID: <span th:text="${event.id}"></span>
                 Name: <span th:text="${event.name}"></span>,
                 Description: <span th:text="${event.description}"></span>,
                 Rating: <span th:text="${event.popularityScore}"></span>

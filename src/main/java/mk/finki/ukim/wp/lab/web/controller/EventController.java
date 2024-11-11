@@ -39,7 +39,6 @@ public class EventController {
         return "listEvents";
     }
 
-    // Method to display the form for adding a new event
     @GetMapping("/add")
     public String getAddEventPage(Model model) {
         List<Location> locations = locationService.findAll();
@@ -47,28 +46,23 @@ public class EventController {
         return "addEvent";
     }
 
-    // Method to handle the form submission for adding a new event
     @PostMapping("/add")
     public String saveEvent(@RequestParam String name,
                             @RequestParam String description,
                             @RequestParam double popularityScore,
                             @RequestParam Long locationId) {
 
-        // Find the location by ID
         Location location = locationService.findAll().stream()
                 .filter(loc -> loc.getId().equals(locationId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
 
-        // Create and save the event
         Event event = new Event((long) (Math.random() * 1000), name, description, popularityScore, location);
-        eventRepository.findAll().add(event);  // Add event to the repository
+        eventRepository.findAll().add(event);
 
-        // Redirect to the list of events
         return "redirect:/events";
     }
 
-    // Method to display the form for editing an existing event
     @GetMapping("/edit/{eventId}")
     public String getEditEventPage(@PathVariable Long eventId, Model model) {
         Event event = eventRepository.findById(eventId);
@@ -79,7 +73,6 @@ public class EventController {
         return "editEvent";
     }
 
-    // Method to handle the form submission for updating an event
     @PostMapping("/edit/{eventId}")
     public String editEvent(@PathVariable Long eventId,
                             @RequestParam String name,
@@ -87,23 +80,28 @@ public class EventController {
                             @RequestParam double popularityScore,
                             @RequestParam Long locationId) {
 
-        // Find the location by ID
         Location location = locationService.findAll().stream()
                 .filter(loc -> loc.getId().equals(locationId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
 
-        // Find the event by ID and update it
         Event event = eventRepository.findById(eventId);
         event.setName(name);
         event.setDescription(description);
         event.setPopularityScore(popularityScore);
         event.setLocation(location);
 
-        // Save the updated event
-       // eventRepository.save(event);
+        eventRepository.save(event);
 
-        // Redirect to the list of events
+        return "redirect:/events";
+    }
+
+    @GetMapping("/delete/{eventId}")
+    public String deleteEvent(@PathVariable Long eventId) {
+        Event eventToDelete = eventRepository.findById(eventId);
+        if (eventToDelete != null) {
+            eventRepository.findAll().remove(eventToDelete);
+        }
         return "redirect:/events";
     }
 }

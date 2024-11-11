@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -29,10 +30,32 @@ public class EventRepository {
         return events;
     }
 
+    public Event findById(long id) {
+        for (Event event : events) {
+            if (event.getId() == id) {
+                return event;
+            }
+        }
+        return null;
+    }
+
     public List<Event> searchEvents(String text, Double minRating) {
         return events.stream()
                 .filter(event -> (event.getName().contains(text) || event.getDescription().contains(text)) &&
                         event.getPopularityScore() >= minRating)
                 .collect(Collectors.toList());
     }
+
+    public Optional<Event> save(Event event) {
+        Optional<Event> existingEvent = events.stream()
+                .filter(e -> e.getId().equals(event.getId()))
+                .findFirst();
+
+        if (existingEvent.isPresent()) {
+            events.remove(existingEvent.get());
+        }
+        events.add(event);
+        return Optional.of(event);
+    }
+
 }
