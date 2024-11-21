@@ -1,37 +1,21 @@
 package mk.finki.ukim.wp.lab.repository;
 
 import mk.finki.ukim.wp.lab.model.Event;
-import mk.finki.ukim.wp.lab.model.Location;
+import mk.finki.ukim.wp.lab.bootstrap.DataHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
 public class EventRepository {
-    private List<Event> events;
-    private LocationRepository locationRepository;
-
-    public EventRepository(LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-        this.events = new ArrayList<>();
-
-        List<Location> locations = locationRepository.findAll();
-
-        for (int i = 1; i <= 10; i++) {
-            Location location = locations.get(i % locations.size());
-            events.add(new Event((long) i,"Event" + i, "Description for Event" + i, i * 10.0, location));
-        }
-    }
 
     public List<Event> findAll() {
-        return events;
+        return DataHolder.events;
     }
 
     public Event findById(long id) {
-        for (Event event : events) {
+        for (Event event : DataHolder.events) {
             if (event.getId() == id) {
                 return event;
             }
@@ -40,22 +24,18 @@ public class EventRepository {
     }
 
     public List<Event> searchEvents(String text, Double minRating) {
-        return events.stream()
+        return DataHolder.events.stream()
                 .filter(event -> (event.getName().contains(text) || event.getDescription().contains(text)) &&
                         event.getPopularityScore() >= minRating)
                 .collect(Collectors.toList());
     }
 
-    public Optional<Event> save(Event event) {
-        Optional<Event> existingEvent = events.stream()
-                .filter(e -> e.getId().equals(event.getId()))
-                .findFirst();
+    public Event save(Event event) {
+        DataHolder.events.removeIf(c -> c.getName().equals(event.getName()));
 
-        if (existingEvent.isPresent()) {
-            events.remove(existingEvent.get());
-        }
-        events.add(event);
-        return Optional.of(event);
+        DataHolder.events.add(event);
+
+        return event;
     }
 
 }
