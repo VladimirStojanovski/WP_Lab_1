@@ -24,7 +24,7 @@ public class EventRepository {
     }
 
     public void like(long id) {
-        for (Event event : events) {
+        for (Event event : DataHolder.events) {
             if (event.getId() == id && !event.isLiked()) {
                 event.setPopularityScore(event.getPopularityScore() + 1);
                 event.setLiked(true);
