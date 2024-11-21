@@ -61,6 +61,23 @@ public class EventController {
         return "addEvent";
     }
 
+    @GetMapping("/delete/{eventId}")
+    public String deleteEvent(@PathVariable Long eventId) {
+        Event eventToDelete = eventRepository.findById(eventId);
+        if (eventToDelete != null) {
+            eventRepository.findAll().remove(eventToDelete);
+        }
+        return "redirect:/events";
+    }
+
+    @GetMapping("/like/{eventId}")
+    public String likeEvent(@PathVariable Long eventId) {
+        Event eventToLike = eventRepository.findById(eventId);
+        if (eventToLike != null) {
+            eventRepository.like(eventToLike.getId());
+        }
+        return "redirect:/events";
+    }
 
     @PostMapping("/add")
     public String saveEvent(@RequestParam String name,
@@ -99,15 +116,6 @@ public class EventController {
 
         eventRepository.save(event);
 
-        return "redirect:/events";
-    }
-
-    @GetMapping("/delete/{eventId}")
-    public String deleteEvent(@PathVariable Long eventId) {
-        Event eventToDelete = eventRepository.findById(eventId);
-        if (eventToDelete != null) {
-            eventRepository.findAll().remove(eventToDelete);
-        }
         return "redirect:/events";
     }
 }

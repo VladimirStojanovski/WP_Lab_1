@@ -23,6 +23,15 @@ public class EventRepository {
         return null;
     }
 
+    public void like(long id) {
+        for (Event event : events) {
+            if (event.getId() == id && !event.isLiked()) {
+                event.setPopularityScore(event.getPopularityScore() + 1);
+                event.setLiked(true);
+            }
+        }
+    }
+
     public List<Event> searchEvents(String text, Double minRating) {
         return DataHolder.events.stream()
                 .filter(event -> (event.getName().contains(text) || event.getDescription().contains(text)) &&
