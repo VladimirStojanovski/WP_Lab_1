@@ -4,10 +4,7 @@ import mk.finki.ukim.wp.lab.model.EventBooking;
 import mk.finki.ukim.wp.lab.service.EventBookingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/eventBooking")
@@ -19,13 +16,14 @@ public class EventBookingController {
         this.eventBookingService = eventBookingService;
     }
 
-    @GetMapping("/eventBooking")
+    @PostMapping("/placeBooking")
     public String placeBooking(
             @RequestParam String eventName,
-            @RequestParam String attendeeName,
-            @RequestParam String attendeeAddress,
             @RequestParam int numTickets,
             Model model) {
+
+        String attendeeName = "asdasdasd";
+        String attendeeAddress = "asdasdasd@gmail.com";
 
         EventBooking booking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numTickets);
 

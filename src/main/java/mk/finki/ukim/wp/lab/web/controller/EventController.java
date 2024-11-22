@@ -50,7 +50,7 @@ public class EventController {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
 
-        Event event = new Event((long) (Math.random() * 1000), name, description, popularityScore, location);
+        Event event = new Event( name, description, popularityScore, location);
         eventService.addEvent(event);
 
         return "redirect:/events";

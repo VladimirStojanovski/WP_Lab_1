@@ -12,7 +12,7 @@ public class Event {
 
     private boolean isLiked;
 
-    public Event(Long id, String name, String description, double popularityScore, Location location){
+    public Event(String name, String description, double popularityScore, Location location){
         this.id = (long) (Math.random() * 1000);
         this.name = name;
         this.description = description;
