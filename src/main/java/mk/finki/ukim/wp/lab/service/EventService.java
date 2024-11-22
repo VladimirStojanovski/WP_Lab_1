@@ -7,4 +7,5 @@ public interface EventService {
     List<Event> listAll();
     List<Event> searchEvents(String text, Double minRating);
     Event getEventById(long id);
+    Event addEvent(Event event);
 }

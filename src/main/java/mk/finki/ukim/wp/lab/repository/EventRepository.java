@@ -14,13 +14,8 @@ public class EventRepository {
         return DataHolder.events;
     }
 
-    public Event findById(long id) {
-        for (Event event : DataHolder.events) {
-            if (event.getId() == id) {
-                return event;
-            }
-        }
-        return null;
+    public Event findById(Long id) {
+        return DataHolder.events.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
     }
 
     public void like(long id) {
