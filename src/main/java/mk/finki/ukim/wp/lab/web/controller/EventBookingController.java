@@ -22,8 +22,8 @@ public class EventBookingController {
             @RequestParam int numTickets,
             Model model) {
 
-        String attendeeName = "asdasdasd";
-        String attendeeAddress = "asdasdasd@gmail.com";
+        String attendeeName = "Example Name";
+        String attendeeAddress = "111.222.333.444";
 
         EventBooking booking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numTickets);
 

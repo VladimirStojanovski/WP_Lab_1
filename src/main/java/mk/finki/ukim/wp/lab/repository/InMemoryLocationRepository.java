@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class LocationRepository {
+public class InMemoryLocationRepository {
 
     public Location save(Location location) {
         DataHolder.locations.removeIf(c -> c.getName().equals(location.getName()));

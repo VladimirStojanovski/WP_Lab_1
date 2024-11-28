@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8"/>
     <title th:text="${event != null} ? 'Edit Event' : 'Add New Event'">Add/Edit Event</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/e59232f0a1.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<header>
-    <h1 th:text="${event != null} ? 'Edit Event' : 'Add New Event'">Add/Edit Event</h1>
-</header>
 
+<header>
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 th:text="${event != null} ? 'EDIT EVENT' : 'ADD NEW EVENT'"></h1>
+        </div>
+    </section>
+</header>
 
 <div class="container">
     <div class="row">
         <div class="col-md-5">
             <form th:action="${event != null} ? '/events/edit/' + ${event.id} : '/events/add'" method="POST">
+
+                <!--Event Name-->
                 <div class="form-group">
                     <label for="name">Event Name</label>
                     <input type="text"
@@ -37,6 +33,8 @@
                            th:value="${event != null} ? ${event.name} : ''" required
                            placeholder="Enter event name">
                 </div>
+
+                <!--Event Description-->
                 <div class="form-group">
                     <label for="description">Description</label>
                     <input type="text"
@@ -44,8 +42,10 @@
                            id="description"
                            name="description"
                            th:value="${event != null} ? ${event.description} : ''" required
-                           placeholder="Description">
+                           placeholder="Enter event description">
                 </div>
+
+                <!--Event Rating-->
                 <div class="form-group">
                     <label for="popularityScore">Rating</label>
                     <input type="number"
@@ -54,10 +54,10 @@
                            name="popularityScore"
                            step="0.1" min="0"
                            th:value="${event != null} ? ${event.popularityScore} : ''" required
-                           placeholder="Rating">
+                           placeholder="Enter event rating">
                 </div>
 
-
+                <!--Event Location-->
                 <div class="form-group">
                     <label>Location</label>
                     <select name="locationId" id="locationId" required class="form-control">
@@ -74,12 +74,11 @@
                     </form>
                     <a type="button" class="btn btn-dark" href="/events">Back</a>
                 </div>
+
             </form>
         </div>
     </div>
 </div>
-
-
 
 </body>
 </html>

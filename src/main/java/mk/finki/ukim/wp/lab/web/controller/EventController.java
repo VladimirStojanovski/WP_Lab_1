@@ -4,7 +4,7 @@ import mk.finki.ukim.wp.lab.model.Event;
 import mk.finki.ukim.wp.lab.model.Location;
 import mk.finki.ukim.wp.lab.service.EventService;
 import mk.finki.ukim.wp.lab.service.LocationService;
-import mk.finki.ukim.wp.lab.repository.EventRepository;
+import mk.finki.ukim.wp.lab.repository.InMemoryEventRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,22 +18,34 @@ public class EventController {
 
     private final EventService eventService;
     private final LocationService locationService;
-    private final EventRepository eventRepository;
+    private final InMemoryEventRepository inMemoryEventRepository;
 
-    public EventController(EventService eventService, LocationService locationService, EventRepository eventRepository) {
+    public EventController(EventService eventService, LocationService locationService, InMemoryEventRepository inMemoryEventRepository) {
         this.eventService = eventService;
         this.locationService = locationService;
-        this.eventRepository = eventRepository;
+        this.inMemoryEventRepository = inMemoryEventRepository;
     }
 
     @GetMapping
-    public String getEventsPage(@RequestParam(required = false) String error, Model model) {
+    public String getEventsPage(@RequestParam(required = false) String searchText,
+                                @RequestParam(required = false) String minRatingStr,
+                                @RequestParam(required = false) String error,
+                                Model model) {
+
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
-        List<Event> events = eventService.listAll();
+        List<Event> events;
+
+        if ((searchText != null && !searchText.isEmpty()) || (minRatingStr != null && !minRatingStr.isEmpty())){
+            double minRating = Double.parseDouble(minRatingStr);
+            events = eventService.searchEvents(searchText, minRating);
+        } else {
+            events = eventService.listAll();
+        }
+
         model.addAttribute("events", events);
 
         return "listEvents";
@@ -66,7 +78,6 @@ public class EventController {
     }
 
 
-
     @GetMapping("/edit/{eventId}")
     public String getEditEventForm(@PathVariable Long eventId, Model model) {
 
@@ -94,13 +105,13 @@ public class EventController {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
 
-        Event event = eventRepository.findById(eventId);
+        Event event = inMemoryEventRepository.findById(eventId);
         event.setName(name);
         event.setDescription(description);
         event.setPopularityScore(popularityScore);
         event.setLocation(location);
 
-        eventRepository.save(event);
+        inMemoryEventRepository.save(event);
 
         return "redirect:/events";
     }
@@ -108,10 +119,10 @@ public class EventController {
     @GetMapping("/delete/{eventId}")
     public String deleteEvent(@PathVariable Long eventId) {
 
-        Event eventToDelete = eventRepository.findById(eventId);
+        Event eventToDelete = inMemoryEventRepository.findById(eventId);
 
         if (eventToDelete != null) {
-            eventRepository.findAll().remove(eventToDelete);
+            inMemoryEventRepository.findAll().remove(eventToDelete);
         }
 
         return "redirect:/events";
@@ -120,10 +131,10 @@ public class EventController {
     @GetMapping("/like/{eventId}")
     public String likeEvent(@PathVariable Long eventId) {
 
-        Event eventToLike = eventRepository.findById(eventId);
+        Event eventToLike = inMemoryEventRepository.findById(eventId);
 
         if (eventToLike != null) {
-            eventRepository.like(eventToLike.getId());
+            inMemoryEventRepository.like(eventToLike.getId());
         }
 
         return "redirect:/events";

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class EventRepository {
+public class InMemoryEventRepository {
 
     public List<Event> findAll() {
         return DataHolder.events;

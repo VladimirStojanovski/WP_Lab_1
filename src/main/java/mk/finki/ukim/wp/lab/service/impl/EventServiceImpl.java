@@ -1,38 +1,39 @@
 package mk.finki.ukim.wp.lab.service.impl;
 
 import mk.finki.ukim.wp.lab.model.Event;
-import mk.finki.ukim.wp.lab.repository.EventRepository;
+import mk.finki.ukim.wp.lab.repository.jpa.EventRepository;
 import mk.finki.ukim.wp.lab.service.EventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService {
 
-    private final EventRepository eventRepository;
+    private final EventRepository EventRepository;
 
-    public EventServiceImpl(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public EventServiceImpl(EventRepository EventRepository) {
+        this.EventRepository = EventRepository;
     }
 
     @Override
     public List<Event> listAll() {
-        return eventRepository.findAll();
+        return EventRepository.findAll();
     }
 
     @Override
     public List<Event> searchEvents(String text, Double minRating) {
-        return eventRepository.searchEvents(text, minRating);
+        return EventRepository.searchEvents(text, minRating);
     }
 
     @Override
-    public Event getEventById(long id){
-        return eventRepository.findById(id);
+    public Optional<Event> getEventById(long id){
+        return EventRepository.findById(id);
     }
 
     @Override
     public Event addEvent(Event event) {
-        return eventRepository.save(event);
+        return EventRepository.save(event);
     }
 }

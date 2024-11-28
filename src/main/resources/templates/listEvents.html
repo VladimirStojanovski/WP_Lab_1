@@ -36,7 +36,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <form action="/" method="get" class="form-inline my-2 my-lg-0">
+        <form action="/events" method="get" class="form-inline my-2 my-lg-0">
             <div class="input-group input-group-sm">
                 <input type="text" class="form-control" aria-label="Small"
                        aria-describedby="inputGroup-sizing-sm"
@@ -44,7 +44,7 @@
                        placeholder="Event Name...">
                 <input type="number" class="form-control" aria-label="Small"
                        aria-describedby="inputGroup-sizing-sm" step="0.1" min="0"
-                       id="minRating" name="minRating"
+                       id="minRatingStr" name="minRatingStr"
                        placeholder="Rating...">
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-secondary btn-number">
@@ -175,7 +175,7 @@
 
 <!--                <a th:href="@{/events/edit/{eventId}(eventId=${event.id})}">Edit</a>-->
 
-<!--                <a th:href="@{/events/delete/{id}(id=${event.id})}" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>-->
+<!--                <a th:href="@{/events/deleteBooking/{id}(id=${event.id})}" onclick="return confirm('Are you sure you want to deleteBooking this event?');">Delete</a>-->
 
 <!--            </li>-->
 <!--        </ul>-->
