@@ -4,5 +4,5 @@ import mk.finki.ukim.wp.lab.model.Location;
 import java.util.List;
 
 public interface LocationService {
-    public List<Location> findAll();
+    List<Location> listAll();
 }

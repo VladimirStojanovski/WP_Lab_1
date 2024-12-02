@@ -21,10 +21,14 @@ public class Event {
     @ManyToOne
     private Location location;
 
-    public Event(String name, String description, double popularityScore, Location location){
+    @ManyToOne
+    private Category category;
+
+    public Event(String name, String description, double popularityScore, Location location, Category category){
         this.name = name;
         this.description = description;
         this.popularityScore = popularityScore;
         this.location = location;
+        this.category = category;
     }
 }

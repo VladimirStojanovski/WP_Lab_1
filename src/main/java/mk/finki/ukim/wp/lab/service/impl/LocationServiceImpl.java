@@ -17,7 +17,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<Location> findAll() {
+    public List<Location> listAll() {
         return locationRepository.findAll();
     }
 }

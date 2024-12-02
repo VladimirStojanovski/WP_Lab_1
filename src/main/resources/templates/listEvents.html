@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Login</title>
+    <title>List - Events</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -35,6 +35,36 @@
                 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+<!--        <form action="/events" method="get" class="form-inline my-2 my-lg-0">-->
+<!--            <div class="input-group input-group-sm">-->
+<!--                <input type="text" class="form-control" aria-label="Small"-->
+<!--                       aria-describedby="inputGroup-sizing-sm"-->
+<!--                       id="categorySearch" name="categorySearch"-->
+<!--                       placeholder="Category...">-->
+<!--                <div class="input-group-append">-->
+<!--                    <button type="submit" class="btn btn-secondary btn-number">-->
+<!--                        <i class="fa fa-search"></i>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+
+        <form action="/events" method="get" class="form-inline my-2 my-lg-0">
+            <div class="input-group input-group-sm">
+                <select name="categorySearch" id="categorySearch" class="form-control">
+                    <option value="">Select Category</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.name}"
+                            th:text="${category.name}"></option>
+                </select>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary btn-number">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
 
         <form action="/events" method="get" class="form-inline my-2 my-lg-0">
             <div class="input-group input-group-sm">
@@ -147,45 +177,4 @@
     </div>
 </div>
 </body>
-
-<!--<body>-->
-<!--<header>-->
-<!--    <h1>Welcome to our Event Booking App</h1>-->
-<!--</header>-->
-<!--<main>-->
-
-<!--    <form action="/" method="get">-->
-<!--        <label for="searchText">Search Events:</label>-->
-<!--        <input type="text" id="searchText" name="searchText" placeholder="Event name or description">-->
-<!--        <label for="minRating">Minimum Rating:</label>-->
-<!--        <input type="number" id="minRating" name="minRating" step="0.1" min="0">-->
-<!--        <button type="submit">Search</button>-->
-<!--    </form>-->
-
-<!--    <h2>Choose an event:</h2>-->
-<!--    <form action="/eventBooking" method="POST">-->
-<!--        <ul>-->
-<!--            <li th:each="event : ${events}">-->
-<!--                <input type="radio" name="eventName" th:value="${event.name}">-->
-<!--                ID: <span th:text="${event.id}"></span>-->
-<!--                Name: <span th:text="${event.name}"></span>,-->
-<!--                Description: <span th:text="${event.description}"></span>,-->
-<!--                Rating: <span th:text="${event.popularityScore}"></span>-->
-<!--                Location: <span th:text="${event.location.name}"></span>-->
-
-<!--                <a th:href="@{/events/edit/{eventId}(eventId=${event.id})}">Edit</a>-->
-
-<!--                <a th:href="@{/events/deleteBooking/{id}(id=${event.id})}" onclick="return confirm('Are you sure you want to deleteBooking this event?');">Delete</a>-->
-
-<!--            </li>-->
-<!--        </ul>-->
-<!--        <h2>Choose number of tickets:</h2>-->
-<!--        <input type="number" name="numTickets" min="1" max="10"><br/><br/>-->
-<!--        <input type="submit" value="Submit">-->
-<!--        <div>-->
-<!--            <a href="/events/add" class="button">Add New Event</a>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</main>-->
-<!--</body>-->
 </html>
