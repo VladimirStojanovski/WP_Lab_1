@@ -6,34 +6,40 @@ import mk.finki.ukim.wp.lab.service.EventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService {
 
-    private final EventRepository EventRepository;
+    private final EventRepository eventRepository;
 
-    public EventServiceImpl(EventRepository EventRepository) {
-        this.EventRepository = EventRepository;
+    public EventServiceImpl(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
     }
 
     @Override
     public List<Event> listAll() {
-        return EventRepository.findAll();
+        return eventRepository.findAll();
     }
 
-    @Override
-    public List<Event> searchEvents(String text, Double minRating) {
-        return EventRepository.searchEvents(text, minRating);
-    }
 
     @Override
-    public Optional<Event> getEventById(long id){
-        return EventRepository.findById(id);
+    public Event getEventById(long id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Event with ID " + id + " not found!"));
     }
 
     @Override
     public Event addEvent(Event event) {
-        return EventRepository.save(event);
+        return eventRepository.save(event);
+    }
+
+    @Override
+    public void deleteEventById(long id) {
+        if (eventRepository.existsById(id)) {
+            eventRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Event with ID " + id + " does not exist!");
+
+        }
     }
 }

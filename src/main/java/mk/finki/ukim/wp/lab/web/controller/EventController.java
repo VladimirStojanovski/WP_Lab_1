@@ -4,7 +4,6 @@ import mk.finki.ukim.wp.lab.model.Event;
 import mk.finki.ukim.wp.lab.model.Location;
 import mk.finki.ukim.wp.lab.service.EventService;
 import mk.finki.ukim.wp.lab.service.LocationService;
-import mk.finki.ukim.wp.lab.repository.InMemoryEventRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +17,10 @@ public class EventController {
 
     private final EventService eventService;
     private final LocationService locationService;
-    private final InMemoryEventRepository inMemoryEventRepository;
 
-    public EventController(EventService eventService, LocationService locationService, InMemoryEventRepository inMemoryEventRepository) {
+    public EventController(EventService eventService, LocationService locationService) {
         this.eventService = eventService;
         this.locationService = locationService;
-        this.inMemoryEventRepository = inMemoryEventRepository;
     }
 
     @GetMapping
@@ -37,19 +34,12 @@ public class EventController {
             model.addAttribute("error", error);
         }
 
-        List<Event> events;
-
-        if ((searchText != null && !searchText.isEmpty()) || (minRatingStr != null && !minRatingStr.isEmpty())){
-            double minRating = Double.parseDouble(minRatingStr);
-            events = eventService.searchEvents(searchText, minRating);
-        } else {
-            events = eventService.listAll();
-        }
-
+        List<Event> events = eventService.listAll();
         model.addAttribute("events", events);
 
         return "listEvents";
     }
+
 
     @PostMapping("/add")
     public String saveEvent(@RequestParam String name,
@@ -68,6 +58,7 @@ public class EventController {
         return "redirect:/events";
     }
 
+
     @GetMapping("/add")
     public String addEventPage(Model model) {
         List<Event> events = this.eventService.listAll();
@@ -81,16 +72,35 @@ public class EventController {
     @GetMapping("/edit/{eventId}")
     public String getEditEventForm(@PathVariable Long eventId, Model model) {
 
-        if (eventService.getEventById(eventId) == null) {
-            model.addAttribute("hasError", true);
-            model.addAttribute("error", "Event not found");
-            return "redirect:/events";
-        }
-
-        model.addAttribute("event", eventService.getEventById(eventId));
+        Event event = eventService.getEventById(eventId);
+        model.addAttribute("event", event);
         model.addAttribute("locations", locationService.findAll());
         return "addEvent";
     }
+
+
+//    @PostMapping("/edit/{eventId}")
+//    public String editEvent(@PathVariable Long eventId,
+//                            @RequestParam String name,
+//                            @RequestParam String description,
+//                            @RequestParam double popularityScore,
+//                            @RequestParam Long locationId) {
+//
+//        Location location = locationService.findAll().stream()
+//                .filter(loc -> loc.getId().equals(locationId))
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
+//
+//        Event event = inMemoryEventRepository.findById(eventId);
+//        event.setName(name);
+//        event.setDescription(description);
+//        event.setPopularityScore(popularityScore);
+//        event.setLocation(location);
+//
+//        inMemoryEventRepository.save(event);
+//
+//        return "redirect:/events";
+//    }
 
 
     @PostMapping("/edit/{eventId}")
@@ -100,43 +110,56 @@ public class EventController {
                             @RequestParam double popularityScore,
                             @RequestParam Long locationId) {
 
+        Event event = eventService.getEventById(eventId);
+
         Location location = locationService.findAll().stream()
                 .filter(loc -> loc.getId().equals(locationId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
 
-        Event event = inMemoryEventRepository.findById(eventId);
         event.setName(name);
         event.setDescription(description);
         event.setPopularityScore(popularityScore);
         event.setLocation(location);
 
-        inMemoryEventRepository.save(event);
+        eventService.addEvent(event);
 
         return "redirect:/events";
     }
+
+
+//    @GetMapping("/delete/{eventId}")
+//    public String deleteEvent(@PathVariable Long eventId) {
+//
+//        Event eventToDelete = eventService.getEventById(eventId);
+//
+//        if (eventToDelete != null) {
+//            eventService.listAll().remove(eventToDelete);
+//        }
+//
+//        return "redirect:/events";
+//    }
 
     @GetMapping("/delete/{eventId}")
     public String deleteEvent(@PathVariable Long eventId) {
-
-        Event eventToDelete = inMemoryEventRepository.findById(eventId);
-
-        if (eventToDelete != null) {
-            inMemoryEventRepository.findAll().remove(eventToDelete);
+        try {
+            eventService.deleteEventById(eventId);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/events?error=" + e.getMessage();
         }
-
         return "redirect:/events";
     }
 
-    @GetMapping("/like/{eventId}")
-    public String likeEvent(@PathVariable Long eventId) {
 
-        Event eventToLike = inMemoryEventRepository.findById(eventId);
-
-        if (eventToLike != null) {
-            inMemoryEventRepository.like(eventToLike.getId());
-        }
-
-        return "redirect:/events";
-    }
+//    @GetMapping("/like/{eventId}")
+//    public String likeEvent(@PathVariable Long eventId) {
+//
+//        Event eventToLike = eventService.getEventById(eventId);
+//
+//        if (eventToLike != null) {
+//            eventService.like(eventToLike.getId());
+//        }
+//
+//        return "redirect:/events";
+//    }
 }
